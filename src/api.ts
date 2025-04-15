@@ -126,8 +126,8 @@ export class Api {
             });
 
             if (response.status !== 200 || !response.data.success) {
-                this._logger.error(`${path} have failed.`);
-                throw new Error(`${path} have failed.`);
+                this._logger.error(`${path} have failed. Response: ${JSON.stringify(response)}`);
+                throw new Error(`${path} have failed. Response: ${JSON.stringify(response)}`);
             }
 
             return response.data.obj as T;
@@ -157,8 +157,8 @@ export class Api {
 
             if (response.status !== 200 || !response.data.success) {
                 this._logger.http(response.data);
-                this._logger.error(`${endpoint} have failed.`);
-                throw new Error(`${endpoint} have failed.`);
+                this._logger.error(`${endpoint} have failed. Response: ${JSON.stringify(response)}`);
+                throw new Error(`${endpoint} have failed. Response: ${JSON.stringify(response)}`);
             }
 
             return response.data.obj as T;
