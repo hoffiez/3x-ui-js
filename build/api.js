@@ -104,8 +104,8 @@ export class Api {
                 },
             });
             if (response.status !== 200 || !response.data.success) {
-                this._logger.error(`${path} have failed. Response: ${JSON.stringify(response)}`);
-                throw new Error(`${path} have failed. Response: ${JSON.stringify(response)}`);
+                this._logger.error(`${path} have failed. Response: ${this.formatResponseError(response)}`);
+                throw new Error(`${path} have failed. Response: ${this.formatResponseError(response)}`);
             }
             return response.data.obj;
         }
@@ -131,8 +131,8 @@ export class Api {
             });
             if (response.status !== 200 || !response.data.success) {
                 this._logger.http(response.data);
-                this._logger.error(`${endpoint} have failed. Response: ${JSON.stringify(response)}`);
-                throw new Error(`${endpoint} have failed. Response: ${JSON.stringify(response)}`);
+                this._logger.error(`${endpoint} have failed. Response: ${this.formatResponseError(response)}`);
+                throw new Error(`${endpoint} have failed. Response: ${this.formatResponseError(response)}`);
             }
             return response.data.obj;
         }
@@ -624,5 +624,11 @@ export class Api {
         finally {
             release();
         }
+    }
+    formatResponseError(response) {
+        return JSON.stringify({
+            status: response.status,
+            data: response.data,
+        });
     }
 }

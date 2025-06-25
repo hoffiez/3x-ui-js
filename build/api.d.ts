@@ -40,4 +40,5 @@ export declare class Api {
     deleteInboundDepletedClients(inboundId: number): Promise<boolean>;
     getOnlineClients(): Promise<string[]>;
     sendBackup(): Promise<boolean>;
+    private formatResponseError;
 }
