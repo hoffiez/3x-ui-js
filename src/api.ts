@@ -6,7 +6,7 @@ import { parseInbound } from "$lib/utils/parseInbound";
 import { Mutex } from "async-mutex";
 import { ProxyAgent } from "proxy-agent";
 import NodeCache from "node-cache";
-import Axios from "axios";
+import Axios, { AxiosResponse } from "axios";
 import urlJoin from "url-join";
 import qs from "qs";
 import { stringifySettings } from "$lib/utils/stringifySettings";
@@ -126,8 +126,8 @@ export class Api {
             });
 
             if (response.status !== 200 || !response.data.success) {
-                this._logger.error(`${path} have failed. Response: ${JSON.stringify(response)}`);
-                throw new Error(`${path} have failed. Response: ${JSON.stringify(response)}`);
+                this._logger.error(`${path} have failed. Response: ${this.formatResponseError(response)}`);
+                throw new Error(`${path} have failed. Response: ${this.formatResponseError(response)}`);
             }
 
             return response.data.obj as T;
@@ -157,8 +157,8 @@ export class Api {
 
             if (response.status !== 200 || !response.data.success) {
                 this._logger.http(response.data);
-                this._logger.error(`${endpoint} have failed. Response: ${JSON.stringify(response)}`);
-                throw new Error(`${endpoint} have failed. Response: ${JSON.stringify(response)}`);
+                this._logger.error(`${endpoint} have failed. Response: ${this.formatResponseError(response)}`);
+                throw new Error(`${endpoint} have failed. Response: ${this.formatResponseError(response)}`);
             }
 
             return response.data.obj as T;
@@ -674,5 +674,12 @@ export class Api {
         } finally {
             release();
         }
+    }
+
+    private formatResponseError(response: AxiosResponse<any, any>) {
+        return JSON.stringify({
+            status: response.status,
+            data: response.data,
+        });
     }
 }
